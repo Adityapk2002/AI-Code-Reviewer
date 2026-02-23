@@ -24,7 +24,7 @@ export default function Home() {
         </div>
 
         <div className="w-1/2">
-          <EditorRight code={output} />
+          <EditorRight code={output} language={language} />
         </div>
       </div>
 

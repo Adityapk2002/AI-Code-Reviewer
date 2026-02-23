@@ -33,6 +33,15 @@ export default function EditorLeft({ code, setCode, setLanguage }: Props) {
       height="100%"
       theme="vs-dark"
       defaultLanguage="javascript"
+      options={{
+        wordWrap: "on",
+        wrappingStrategy: "advanced",
+        scrollBeyondLastLine: false,
+        minimap: { enabled: false },
+        fontSize: 14,
+        lineHeight: 22,
+        padding: { top: 20 },
+      }}
       value={code}
       onMount={handleMount}
       onChange={(v) => setCode(v || "")}

@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     }
     const prompt = getPrompt(mode as AnalyzeMode, code, language);
 
-    const result = askGroq(prompt);
+    const result = await askGroq(prompt);
 
     return NextResponse.json({ result });
   } catch (err) {

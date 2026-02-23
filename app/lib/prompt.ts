@@ -1,4 +1,4 @@
-export type AnalyzeMode = "check" | "improve" | "optimize";
+export type AnalyzeMode = "check" | "improve" | "optimize" | "explain";
 
 export function getPrompt(
   mode: AnalyzeMode,
@@ -7,6 +7,15 @@ export function getPrompt(
 ): string {
   const lang = language || "unknown";
 
+  const baseRules = `
+STRICT OUTPUT RULES:
+- Do NOT use markdown
+- Do NOT use ** or headings
+- Do NOT use bullet symbols
+- Do NOT use backticks
+- Return plain text or plain code only
+- No extra commentary
+`;
   const prompts: Record<AnalyzeMode, string> = {
     check: `You are an expert code reviewer. Analyze the following ${lang} code for:
 1. Syntax errors
@@ -18,7 +27,7 @@ export function getPrompt(
 Return ONLY the corrected code with inline comments starting with "// FIX:" explaining what was wrong and what was changed.
 If the code is already correct, return it as-is with a comment "// ✓ No issues found".
 Do NOT add any explanation outside the code. Only return the code block.
-
+${baseRules}
 Code to analyze:
 \`\`\`${lang}
 ${code}
@@ -33,7 +42,7 @@ ${code}
 
 Return ONLY the improved code with inline comments starting with "// IMPROVED:" explaining significant changes.
 Do NOT add any explanation outside the code. Only return the code block.
-
+${baseRules}
 Code to improve:
 \`\`\`${lang}
 ${code}
@@ -57,12 +66,39 @@ IMPORTANT RULES:
 Return ONLY the optimized code with inline comments starting with "// OPTIMIZED:" explaining what was improved and why.
 Do NOT add any explanation outside the code.
 Only return the code block.
-
+${baseRules}
 Code to optimize:
 \`\`\`${lang}
 ${code}
 \`\`\``,
-  };
+    explain: `
+You are a senior developer explaining code inside an IDE.
 
+Explain this ${lang} code in a clean developer-friendly way.
+
+${baseRules}
+
+OUTPUT FORMAT (STRICT):
+
+What this code does:
+<plain explanation in simple sentences>
+
+Possible issues:
+<plain sentences>
+
+Improvements:
+<plain sentences>
+
+IMPORTANT:
+- No stars
+- No markdown
+- No headings with #
+- No bullet symbols
+- Only clean plain text like IDE assistant
+
+CODE:
+${code}
+`,
+  };
   return prompts[mode];
 }
