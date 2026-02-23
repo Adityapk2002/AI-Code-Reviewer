@@ -83,12 +83,6 @@ OUTPUT FORMAT (STRICT):
 What this code does:
 <plain explanation in simple sentences>
 
-Possible issues:
-<plain sentences>
-
-Improvements:
-<plain sentences>
-
 IMPORTANT:
 - No stars
 - No markdown

@@ -6,6 +6,7 @@ type Props = {
   setOutput: (output: string) => void;
   loading: boolean;
   setLoading: (loading: boolean) => void;
+  setDiff: (d: string) => void;
 };
 
 export default function Controls({
@@ -14,6 +15,7 @@ export default function Controls({
   setOutput,
   loading,
   setLoading,
+  setDiff,
 }: Props) {
   const callAI = async (mode: string) => {
     if (!code) {
@@ -34,6 +36,7 @@ export default function Controls({
 
       const data = await res.json();
       setOutput(data.result);
+      setDiff(data.diff);
     } catch (err) {
       console.error(err);
       alert("AI request failed");

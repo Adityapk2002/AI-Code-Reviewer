@@ -1,6 +1,7 @@
 import { askGroq } from "@/app/lib/groq";
 import { AnalyzeMode, getPrompt } from "@/app/lib/prompt";
 import { NextRequest, NextResponse } from "next/server";
+import { generateDiff } from "@/app/lib/diffEngine";
 
 export async function POST(req: NextRequest) {
   try {
@@ -15,7 +16,12 @@ export async function POST(req: NextRequest) {
 
     const result = await askGroq(prompt);
 
-    return NextResponse.json({ result });
+    const diff = generateDiff(code, result);
+
+    return NextResponse.json({
+      result,
+      diff,
+    });
   } catch (err) {
     console.error(err);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
